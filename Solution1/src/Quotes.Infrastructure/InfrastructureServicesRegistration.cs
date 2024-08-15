@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Quotes.Domain.Entities;
+using Quotes.Domain.Entities.Quotes;
 using Quotes.Infrastructure.Database;
 using Quotes.Infrastructure.Repository;
 

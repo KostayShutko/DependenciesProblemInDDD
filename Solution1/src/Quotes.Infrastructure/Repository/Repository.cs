@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Quotes.Domain.Entities;
+using Quotes.Domain.Entities.ValueObjects;
 using System.Linq.Expressions;
 
 namespace Quotes.Infrastructure.Repository;
 
 public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
-{
+{ 
     protected readonly DbContext context;
 
     public Repository(DbContext context)
@@ -50,7 +51,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
         return ApplySpecification(specification);
     }
 
-    public async Task<TEntity> FindByIdAsync(int id)
+    public async Task<TEntity> FindByIdAsync(EntityId id)
     {
         return await context.Set<TEntity>().FindAsync(id);
     }

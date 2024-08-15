@@ -1,5 +1,6 @@
 ﻿using Quotes.Application;
 using Quotes.Infrastructure;
+using System.Reflection;
 
 namespace Quotes.API;
 
@@ -17,6 +18,9 @@ public class Startup
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+
+        var executingAssembly = Assembly.GetExecutingAssembly();
+        services.AddAutoMapper(executingAssembly);
 
         services.AddApplicationServices();
         services.AddInfrastructureServices(Configuration);

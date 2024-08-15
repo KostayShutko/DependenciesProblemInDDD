@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Quotes.Domain.Entities;
+﻿using Quotes.Domain.Entities;
+using Quotes.Domain.Entities.Quotes;
 using Quotes.Infrastructure.Database;
 
 namespace Quotes.Infrastructure.Repository;

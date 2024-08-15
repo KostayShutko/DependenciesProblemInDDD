@@ -1,8 +1,10 @@
-﻿using System.Linq.Expressions;
+﻿using Quotes.Domain.Entities;
+using Quotes.Domain.Entities.ValueObjects;
+using System.Linq.Expressions;
 
 namespace Quotes.Infrastructure.Repository;
 
-public interface IRepository<TEntity> where TEntity : class
+public interface IRepository<TEntity> where TEntity : Entity
 {
     Task<TEntity> AddAsync(TEntity entity);
 
@@ -18,7 +20,7 @@ public interface IRepository<TEntity> where TEntity : class
 
     IQueryable<TEntity> Find(ISpecification<TEntity> specification);
 
-    Task<TEntity> FindByIdAsync(int id);
+    Task<TEntity> FindByIdAsync(EntityId id);
 
     void Remove(TEntity entity);
 

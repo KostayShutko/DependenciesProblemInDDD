@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Quotes.Domain.Entities;
+using Quotes.Domain.Entities.Quotes;
+using Quotes.Infrastructure.Database.EntityTypeConfigurations;
 
 namespace Quotes.Infrastructure.Database;
 
@@ -15,6 +16,8 @@ public class QuotesContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new QuotesEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new QuoteItemConfiguration());
+        modelBuilder.ApplyConfiguration(new PaymentConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }
