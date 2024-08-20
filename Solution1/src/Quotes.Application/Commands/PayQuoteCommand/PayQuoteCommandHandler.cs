@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Quotes.Application.Specifications;
 using Quotes.Domain.Entities.Quotes;
 using Quotes.Infrastructure.Repository;
 
@@ -13,7 +14,7 @@ public class PayQuoteCommandHandler : BaseCommand<Quote>, IRequestHandler<PayQuo
 
     public async Task<Guid> Handle(PayQuoteCommand command, CancellationToken cancellationToken)
     {
-        var quote = await FindByIdAsync(command.QuoteId);
+        var quote = FindBySpecification(new GetByQuoteIdWithPaymentSpecification(command.QuoteId)).First();
 
         quote.Pay();
 

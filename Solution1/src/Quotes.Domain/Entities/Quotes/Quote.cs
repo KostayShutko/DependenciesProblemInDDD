@@ -12,7 +12,7 @@ public class Quote : Aggregate
         Status = QuoteStatus.Draft;
         TotalCost = 0;
         TotalCostWithTaxes = 0;
-        Discount = Discount.Standart;
+        Discount = Discount.Default;
         CustomerId = new EntityId();
         CompanyId = new EntityId();
         ConsultantId = new EntityId();
@@ -54,9 +54,11 @@ public class Quote : Aggregate
         ConsultantId = consultantId;
     }
 
-    public void ApplyDiscount()
+    public void ApplyDiscount(Discount discount)
     {
-        Discount = new Discount(0.05M);
+        Discount = discount;
+
+        CalculateTotals();
     }
 
     public void Submit()
@@ -99,6 +101,13 @@ public class Quote : Aggregate
     public void AddQuoteItem(QuoteItem quoteItem)
     {
         QuoteItems.Add(quoteItem);
+
+        CalculateTotals();
+    }
+
+    public void RemoveQuoteItem(QuoteItem quoteItem)
+    {
+        QuoteItems.Remove(quoteItem);
 
         CalculateTotals();
     }

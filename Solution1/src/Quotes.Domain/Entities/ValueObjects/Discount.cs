@@ -7,5 +7,5 @@ public class Discount : ValueObject<decimal>
     {
     }
 
-    public static Discount Standart => new Discount(1);
+    public static Discount Default => new Discount(1);
 }

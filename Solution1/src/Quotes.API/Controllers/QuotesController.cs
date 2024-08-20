@@ -30,7 +30,7 @@ public class QuotesController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("/Quotes/{id}/quoteItems")]
+    [HttpPost("{id}/quoteItems")]
     public async Task<IActionResult> AddQuoteItem([FromRoute] Guid id, [FromBody] AddQuoteItemRequest request)
     {
         var command = mapper.Map<AddQuoteItemCommand>(request);
@@ -38,14 +38,14 @@ public class QuotesController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("/Quotes/{id}/approve")]
+    [HttpPut("{id}/approval")]
     public async Task<IActionResult> ApproveQuote([FromRoute] Guid id)
     {
         var result = await mediator.Send(new ApproveQuoteCommand { QuoteId = id });
         return Ok(result);
     }
 
-    [HttpPut("/Quotes/{id}/pay")]
+    [HttpPut("{id}/payment")]
     public async Task<IActionResult> PayQuote([FromRoute] Guid id)
     {
         var result = await mediator.Send(new PayQuoteCommand { QuoteId = id });
