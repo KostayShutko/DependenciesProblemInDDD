@@ -1,17 +1,16 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
 using Quotes.Domain.BusinessRules.Checks;
 using Quotes.Domain.Exceptions;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace Quotes.Domain.BusinessRules;
 
 public static class BusinessRulesValidator
 {
-    private static IServiceProvider serviceProvider;
+    private static IHttpContextAccessor httpContextAccessor;
 
-    public static void Initialize(IServiceProvider provider)
+    public static void Initialize(IHttpContextAccessor accessor)
     {
-        serviceProvider = provider;
+        httpContextAccessor = accessor;
     }
 
     public static void CheckRule(IBusinessRule rule)
@@ -26,8 +25,7 @@ public static class BusinessRulesValidator
     {
         var type = ResolveCheckType(rule);
 
-        using var serviceScope = serviceProvider.CreateScope();
-        var check = serviceScope.ServiceProvider.GetService(type) as ICheck;
+        var check = httpContextAccessor.HttpContext.RequestServices.GetService(type) as ICheck;
 
         rule.Check = check;
 

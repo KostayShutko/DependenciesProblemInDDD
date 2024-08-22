@@ -16,6 +16,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddHttpContextAccessor();
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
@@ -29,7 +30,7 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        BusinessRulesValidator.Initialize(app.ApplicationServices);
+        BusinessRulesValidator.Initialize(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
 
         app.UseSwagger();
         app.UseSwaggerUI();
