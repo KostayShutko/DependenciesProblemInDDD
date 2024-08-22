@@ -1,7 +1,7 @@
 ﻿using Quotes.Domain.Entities.Quotes;
 using Quotes.Infrastructure.Repository;
 
-namespace Quotes.Application.Specifications;
+namespace Quotes.Infrastructure.Repository.Specifications;
 
 public class GetByQuoteIdWithPaymentSpecification : BaseSpecification<Quote>
 {

@@ -1,4 +1,5 @@
 ﻿using Quotes.Domain.Entities.ValueObjects;
+using Quotes.Domain.BusinessRules;
 
 namespace Quotes.Domain.Entities.Quotes;
 
@@ -18,12 +19,9 @@ public class Quote : Aggregate
         ConsultantId = new EntityId();
     }
 
-    public static Quote Create(string name)
+    public static Quote Create()
     {
         var quote = new Quote();
-
-        quote.Name = new Title(name);
-
         return quote;
     }
 
@@ -38,6 +36,13 @@ public class Quote : Aggregate
     public Cost TotalCost { get; private set; }
     public Cost TotalCostWithTaxes { get; private set; }
     public virtual List<QuoteItem> QuoteItems { get; private set; }
+
+    public async Task SetName(Title name)
+    {
+        await BusinessRulesValidator.CheckRule(new QuoteNameMustBeUniqueRule(name));
+
+        Name = name;
+    }
 
     public void SetCustomer(EntityId customerId)
     {

@@ -1,4 +1,5 @@
 ﻿using Quotes.Application;
+using Quotes.Domain.BusinessRules;
 using Quotes.Infrastructure;
 using System.Reflection;
 
@@ -28,6 +29,8 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        BusinessRulesValidator.Initialize(app.ApplicationServices);
+
         app.UseSwagger();
         app.UseSwaggerUI();
 

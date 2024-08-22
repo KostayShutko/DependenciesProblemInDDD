@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using Quotes.Application.Specifications;
 using Quotes.Domain.Entities.Quotes;
 using Quotes.Infrastructure.Repository;
+using Quotes.Infrastructure.Repository.Specifications;
 
 namespace Quotes.Application.Commands.PayQuoteCommand;
 
