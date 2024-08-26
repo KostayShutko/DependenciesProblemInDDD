@@ -16,9 +16,11 @@ public class IsQuoteNameUniqueCheck : IIsQuoteNameUniqueCheck
         this.repository = repository;
     }
 
-    public async Task<bool> IsSuccessful(Title name)
+    public async Task<ICheckResult> Execute(Title name)
     {
         var hasAny = await repository.Find(new GetByQuoteNameSpecification(name)).AnyAsync();
-        return !hasAny;
+        return hasAny
+            ? CheckResult.Failed
+            : CheckResult.Successful;
     }
 }

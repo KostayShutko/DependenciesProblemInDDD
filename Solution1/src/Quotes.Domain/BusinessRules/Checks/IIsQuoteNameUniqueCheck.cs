@@ -4,5 +4,5 @@ namespace Quotes.Domain.BusinessRules.Checks;
 
 public interface IIsQuoteNameUniqueCheck : ICheck
 {
-    Task<bool> IsSuccessful(Title name);
+    Task<ICheckResult> Execute(Title name);
 }

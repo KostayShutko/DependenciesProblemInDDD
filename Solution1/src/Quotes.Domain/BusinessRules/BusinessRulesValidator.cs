@@ -15,24 +15,16 @@ public static class BusinessRulesValidator
 
     public static async Task CheckRule(IAsyncBusinessRule rule)
     {
-        var type = ResolveCheckType(rule);
-        var check = ServiceDependencyProvider.GetService<ICheck>(type);
-
-        rule.Check = check;
+        if (rule is IHasCheck ruleWithCheck)
+        {
+            var check = ServiceDependencyProvider.GetService<ICheck>(ruleWithCheck.CheckType);
+            ruleWithCheck.UseCheck(check);
+        }
 
         var isBroken = await rule.IsBroken();
         if (isBroken)
         {
             throw new BusinessRuleValidationException(rule);
         }
-    }
-
-    private static Type ResolveCheckType(IAsyncBusinessRule rule)
-    {
-        return rule switch
-        {
-            QuoteNameMustBeUniqueRule => typeof(IIsQuoteNameUniqueCheck),
-            _ => throw new NotImplementedException()
-        };
     }
 }
