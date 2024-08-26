@@ -1,5 +1,6 @@
 ﻿using Quotes.Domain.Entities.ValueObjects;
 using Quotes.Domain.BusinessRules;
+using Quotes.Domain.Entities.Users;
 
 namespace Quotes.Domain.Entities.Quotes;
 
@@ -44,8 +45,10 @@ public class Quote : Aggregate
         Name = name;
     }
 
-    public void SetCustomer(EntityId customerId)
+    public async Task SetCustomer(EntityId customerId)
     {
+        await BusinessRulesValidator.CheckRule(new UserMustExistRule(customerId, UserType.Customer));
+
         CustomerId = customerId;
     }
 
@@ -54,8 +57,10 @@ public class Quote : Aggregate
         CompanyId = companyId;
     }
 
-    public void SetConsultantId(EntityId consultantId)
+    public async Task SetConsultantId(EntityId consultantId)
     {
+        await BusinessRulesValidator.CheckRule(new UserMustExistRule(consultantId, UserType.Consultant));
+
         ConsultantId = consultantId;
     }
 

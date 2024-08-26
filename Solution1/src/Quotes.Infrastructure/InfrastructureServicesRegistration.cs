@@ -18,6 +18,7 @@ public static class InfrastructureServicesRegistration
         services.AddDbContext<QuotesContext>(options => options.UseSqlServer(configuration.GetConnectionString("DatabaseConnectionString")));
         services.AddTransient<IRepository<Quote>, QuotesRepository>();
         services.AddTransient<IIsQuoteNameUniqueCheck, IsQuoteNameUniqueCheck>();
+        services.AddTransient<IDoesUserExistCheck, DoesUserExistCheck>();
 
         return services;
     }
