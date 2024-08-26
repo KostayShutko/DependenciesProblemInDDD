@@ -15,6 +15,7 @@ public class Quote : Aggregate
         TotalCost = 0;
         TotalCostWithTaxes = 0;
         Discount = Discount.Default;
+        Tax = Tax.Default;
         CustomerId = new EntityId();
         CompanyId = new EntityId();
         ConsultantId = new EntityId();
@@ -32,6 +33,7 @@ public class Quote : Aggregate
     public EntityId ConsultantId { get; private set; }
     public QuoteStatus Status { get; private set; }
     public Discount Discount { get; private set; }
+    public Tax Tax { get; private set; }
     public DateTime CreatedOn { get; private set; }
     public virtual Payment Payment { get; private set; }
     public Cost TotalCost { get; private set; }
@@ -67,6 +69,13 @@ public class Quote : Aggregate
     public void ApplyDiscount(Discount discount)
     {
         Discount = discount;
+
+        CalculateTotals();
+    }
+
+    public void ApplyTax(Tax tax)
+    {
+        Tax = tax;
 
         CalculateTotals();
     }
@@ -127,6 +136,6 @@ public class Quote : Aggregate
         Cost itemsCost = QuoteItems.Sum(item => item.TotalCost);
         Cost itemsCostWithDiscount = itemsCost * Discount;
         TotalCost = itemsCostWithDiscount;
-        TotalCostWithTaxes = itemsCostWithDiscount * new Tax(0.15M);
+        TotalCostWithTaxes = itemsCostWithDiscount * Tax;
     }
 }

@@ -6,4 +6,6 @@ public class Tax : ValueObject<decimal>
         : base(tax)
     {
     }
+
+    public static Tax Default => new Tax(1);
 }
