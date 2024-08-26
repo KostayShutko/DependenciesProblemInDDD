@@ -1,18 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Quotes.Domain.BusinessRules.Checks;
+﻿using Quotes.Domain.BusinessRules.Checks;
 using Quotes.Domain.Exceptions;
 
 namespace Quotes.Domain.BusinessRules;
 
 public static class BusinessRulesValidator
 {
-    private static IHttpContextAccessor httpContextAccessor;
-
-    public static void Initialize(IHttpContextAccessor accessor)
-    {
-        httpContextAccessor = accessor;
-    }
-
     public static void CheckRule(IBusinessRule rule)
     {
         if (rule.IsBroken())
@@ -24,8 +16,7 @@ public static class BusinessRulesValidator
     public static async Task CheckRule(IAsyncBusinessRule rule)
     {
         var type = ResolveCheckType(rule);
-
-        var check = httpContextAccessor.HttpContext.RequestServices.GetService(type) as ICheck;
+        var check = ServiceDependencyProvider.GetService<ICheck>(type);
 
         rule.Check = check;
 
