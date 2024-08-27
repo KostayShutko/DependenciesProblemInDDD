@@ -46,9 +46,19 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
         return await context.Set<TEntity>().Where(predicate).CountAsync();
     }
 
-    public IQueryable<TEntity> Find(ISpecification<TEntity> specification)
+    public async Task<TEntity> FindFirstAsync(ISpecification<TEntity> specification)
     {
-        return ApplySpecification(specification);
+        return await ApplySpecification(specification).FirstAsync();
+    }
+
+    public async Task<IEnumerable<TEntity>> FindAsync(ISpecification<TEntity> specification)
+    {
+        return await ApplySpecification(specification).ToListAsync();
+    }
+
+    public async Task<bool> HasAnyAsync(ISpecification<TEntity> specification)
+    {
+        return await ApplySpecification(specification).AnyAsync();
     }
 
     public async Task<TEntity> FindByIdAsync(EntityId id)

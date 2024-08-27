@@ -1,5 +1,4 @@
 ﻿using Quotes.Domain.Entities.Quotes;
-using Quotes.Infrastructure.Repository;
 
 namespace Quotes.Infrastructure.Repository.Specifications;
 

@@ -1,5 +1,5 @@
 ﻿using Quotes.Application;
-using Quotes.Domain;
+using Quotes.Domain.Providers;
 using Quotes.Infrastructure;
 using System.Reflection;
 

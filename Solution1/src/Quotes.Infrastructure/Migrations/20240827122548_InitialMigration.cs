@@ -20,8 +20,10 @@ namespace Quotes.Infrastructure.Migrations
                     ConsultantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Tax = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TotalCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalCostWithDiscount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TotalCostWithTaxes = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>

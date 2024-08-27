@@ -24,6 +24,7 @@ public class QuoteItem : Entity
     }
 
     public EntityId QuoteId { get; private set; }
+    public virtual Quote Quote { get; set; }
     public Title Name { get; private set; }
     public Code Code { get; private set; }
     public string Type { get; private set; }

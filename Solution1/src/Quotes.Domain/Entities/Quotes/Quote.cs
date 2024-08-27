@@ -1,11 +1,15 @@
 ﻿using Quotes.Domain.Entities.ValueObjects;
 using Quotes.Domain.BusinessRules;
 using Quotes.Domain.Entities.Users;
+using Quotes.Domain.Providers;
 
 namespace Quotes.Domain.Entities.Quotes;
 
 public class Quote : Aggregate
 {
+    private ITaxProvider taxProvider => ServiceDependencyProvider.GetService<ITaxProvider>();
+    private IDiscountProvider discountProvider => ServiceDependencyProvider.GetService<IDiscountProvider>();
+
     public Quote()
     {
         Id = EntityId.New;
@@ -37,6 +41,7 @@ public class Quote : Aggregate
     public DateTime CreatedOn { get; private set; }
     public virtual Payment Payment { get; private set; }
     public Cost TotalCost { get; private set; }
+    public Cost TotalCostWithDiscount { get; private set; }
     public Cost TotalCostWithTaxes { get; private set; }
     public virtual List<QuoteItem> QuoteItems { get; private set; }
 
@@ -54,66 +59,84 @@ public class Quote : Aggregate
         CustomerId = customerId;
     }
 
-    public void SetCompanyInfo(EntityId companyId)
+    public async Task SetCompany(EntityId companyId)
     {
+        await BusinessRulesValidator.CheckRule(new CompanyMustExistRule(companyId));
+
         CompanyId = companyId;
     }
 
-    public async Task SetConsultantId(EntityId consultantId)
+    public async Task SetConsultant(EntityId consultantId)
     {
         await BusinessRulesValidator.CheckRule(new UserMustExistRule(consultantId, UserType.Consultant));
 
         ConsultantId = consultantId;
     }
 
-    public void ApplyDiscount(Discount discount)
+    public async Task ApplyDiscount()
     {
-        Discount = discount;
+        BusinessRulesValidator.CheckRule(new ValueMustBeNotNullRule(CustomerId));
+
+        Discount = await discountProvider.GetDiscount(CustomerId);
 
         CalculateTotals();
     }
 
-    public void ApplyTax(Tax tax)
+    public async Task ApplyTax()
     {
-        Tax = tax;
+        Tax = await taxProvider.GetTax();
 
         CalculateTotals();
     }
 
     public void Submit()
     {
+        BusinessRulesValidator.CheckRule(new StatusTransitionMustBeAllowedRule(Status, QuoteStatus.Submitted));
+
         Status = QuoteStatus.Submitted;
     }
 
     public void Review()
     {
+        BusinessRulesValidator.CheckRule(new StatusTransitionMustBeAllowedRule(Status, QuoteStatus.UnderReview));
+
         Status = QuoteStatus.UnderReview;
     }
 
     public void Approve()
     {
+        BusinessRulesValidator.CheckRule(new StatusTransitionMustBeAllowedRule(Status, QuoteStatus.Approved));
+
         Payment = new Payment(Id);
         Status = QuoteStatus.Approved;
     }
 
     public void Amend()
     {
+        BusinessRulesValidator.CheckRule(new StatusTransitionMustBeAllowedRule(Status, QuoteStatus.Draft));
+
         Status = QuoteStatus.Draft;
     }
 
     public void Pay()
     {
+        BusinessRulesValidator.CheckRule(new StatusTransitionMustBeAllowedRule(Status, QuoteStatus.Paid));
+
         Payment.Complete();
         Status = QuoteStatus.Paid;
     }
 
     public void Complete()
     {
+        BusinessRulesValidator.CheckRule(new StatusTransitionMustBeAllowedRule(Status, QuoteStatus.Completed));
+
         Status = QuoteStatus.Completed;
     }
 
     public void Expire()
     {
+        BusinessRulesValidator.CheckRule(new StatusTransitionMustBeAllowedRule(Status, QuoteStatus.Expired));
+
         Status = QuoteStatus.Expired;
     }
 
@@ -133,9 +156,12 @@ public class Quote : Aggregate
 
     private void CalculateTotals()
     {
-        Cost itemsCost = QuoteItems.Sum(item => item.TotalCost);
-        Cost itemsCostWithDiscount = itemsCost * Discount;
-        TotalCost = itemsCostWithDiscount;
-        TotalCostWithTaxes = itemsCostWithDiscount * Tax;
+        TotalCost = QuoteItems.Sum(item => item.TotalCost);
+
+        Cost discountAmount = TotalCost * Discount;
+        TotalCostWithDiscount = TotalCost - discountAmount;
+
+        Cost taxAmount = TotalCostWithDiscount * Tax;
+        TotalCostWithTaxes = TotalCostWithDiscount + taxAmount;
     }
 }

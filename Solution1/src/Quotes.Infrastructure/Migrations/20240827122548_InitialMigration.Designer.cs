@@ -12,7 +12,7 @@ using Quotes.Infrastructure.Database;
 namespace Quotes.Infrastructure.Migrations
 {
     [DbContext(typeof(QuotesContext))]
-    [Migration("20240815150306_InitialMigration")]
+    [Migration("20240827122548_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,7 +49,6 @@ namespace Quotes.Infrastructure.Migrations
             modelBuilder.Entity("Quotes.Domain.Entities.Quotes.Quote", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CompanyId")
@@ -74,7 +73,13 @@ namespace Quotes.Infrastructure.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Tax")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal>("TotalCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalCostWithDiscount")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TotalCostWithTaxes")
@@ -129,11 +134,13 @@ namespace Quotes.Infrastructure.Migrations
 
             modelBuilder.Entity("Quotes.Domain.Entities.Quotes.QuoteItem", b =>
                 {
-                    b.HasOne("Quotes.Domain.Entities.Quotes.Quote", null)
+                    b.HasOne("Quotes.Domain.Entities.Quotes.Quote", "Quote")
                         .WithMany("QuoteItems")
                         .HasForeignKey("QuoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Quote");
                 });
 
             modelBuilder.Entity("Quotes.Domain.Entities.Quotes.Quote", b =>

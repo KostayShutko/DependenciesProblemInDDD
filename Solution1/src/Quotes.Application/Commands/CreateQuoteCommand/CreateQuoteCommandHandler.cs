@@ -17,6 +17,11 @@ public class CreateQuoteCommandHandler : BaseCommand<Quote>, IRequestHandler<Cre
         var quote = Quote.Create();
 
         await quote.SetName(new Title(command.Name));
+        await quote.SetCompany(new EntityId(command.CompanyId));
+        await quote.SetConsultant(new EntityId(command.ConsultantId));
+        await quote.SetCustomer(new EntityId(command.CustomerId));
+        await quote.ApplyDiscount();
+        await quote.ApplyTax();
 
         var savedQuote = await SaveChangesAsync(quote, true);
 

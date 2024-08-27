@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Quotes.Domain;
+namespace Quotes.Domain.Providers;
 
 public class ServiceDependencyProvider
 {
@@ -17,6 +17,12 @@ public class ServiceDependencyProvider
         where IService : class
     {
         return httpContextAccessor.HttpContext.RequestServices.GetService(type) as IService;
+    }
+
+    public static IService GetService<IService>()
+        where IService : class
+    {
+        return httpContextAccessor.HttpContext.RequestServices.GetService<IService>();
     }
 
 }

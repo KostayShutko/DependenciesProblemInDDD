@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Quotes.Domain.Entities.Quotes;
 using Quotes.Infrastructure.Repository;
+using Quotes.Infrastructure.Repository.Specifications;
 
 namespace Quotes.Application.Commands.AddQuoteItemCommand;
 
@@ -13,7 +14,7 @@ public class AddQuoteItemCommandHandler : BaseCommand<Quote>, IRequestHandler<Ad
 
     public async Task<Guid> Handle(AddQuoteItemCommand command, CancellationToken cancellationToken)
     {
-        var quote = await FindByIdAsync(command.QuoteId);
+        var quote = await FindFirstBySpecification(new GetByQuoteIdWithQuoteItemsSpecification(command.QuoteId));
 
         var quoteItem = QuoteItem.Create(
             command.QuoteId,

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Quotes.Domain.BusinessRules.Checks;
+﻿using Quotes.Domain.BusinessRules.Checks;
 using Quotes.Domain.Entities.Quotes;
 using Quotes.Domain.Entities.ValueObjects;
 using Quotes.Infrastructure.Repository;
@@ -18,7 +17,7 @@ public class IsQuoteNameUniqueCheck : IIsQuoteNameUniqueCheck
 
     public async Task<ICheckResult> Execute(Title name)
     {
-        var hasAny = await repository.Find(new GetByQuoteNameSpecification(name)).AnyAsync();
+        var hasAny = await repository.HasAnyAsync(new GetByQuoteNameSpecification(name));
         return hasAny
             ? CheckResult.Failed
             : CheckResult.Successful;

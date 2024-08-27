@@ -32,10 +32,16 @@ public class QuotesEntityTypeConfiguration : IEntityTypeConfiguration<Quote>
         builder.Property(quote => quote.Discount)
             .HasConversion<ValueObjectConverter<Discount, decimal>>();
 
+        builder.Property(quote => quote.Tax)
+            .HasConversion<ValueObjectConverter<Tax, decimal>>();
+
         builder.Property(quote => quote.TotalCost)
             .HasConversion<ValueObjectConverter<Cost, decimal>>();
 
         builder.Property(quote => quote.TotalCostWithTaxes)
+            .HasConversion<ValueObjectConverter<Cost, decimal>>();
+
+        builder.Property(quote => quote.TotalCostWithDiscount)
             .HasConversion<ValueObjectConverter<Cost, decimal>>();
 
         builder
@@ -45,7 +51,7 @@ public class QuotesEntityTypeConfiguration : IEntityTypeConfiguration<Quote>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(quote => quote.QuoteItems)
-            .WithOne()
+            .WithOne(quoteItem => quoteItem.Quote)
             .HasForeignKey(quoteItem => quoteItem.QuoteId)
             .OnDelete(DeleteBehavior.Cascade);
     }

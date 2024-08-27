@@ -1,5 +1,6 @@
 ﻿using Quotes.Domain.BusinessRules.Checks;
 using Quotes.Domain.Exceptions;
+using Quotes.Domain.Providers;
 
 namespace Quotes.Domain.BusinessRules;
 

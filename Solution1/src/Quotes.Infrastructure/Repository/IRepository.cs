@@ -18,7 +18,11 @@ public interface IRepository<TEntity> where TEntity : Entity
 
     Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
 
-    IQueryable<TEntity> Find(ISpecification<TEntity> specification);
+    Task<TEntity> FindFirstAsync(ISpecification<TEntity> specification);
+
+    Task<IEnumerable<TEntity>> FindAsync(ISpecification<TEntity> specification);
+
+    Task<bool> HasAnyAsync(ISpecification<TEntity> specification);
 
     Task<TEntity> FindByIdAsync(EntityId id);
 

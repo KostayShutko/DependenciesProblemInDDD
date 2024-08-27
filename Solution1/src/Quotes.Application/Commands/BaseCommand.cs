@@ -14,14 +14,19 @@ public abstract class BaseCommand<TEntity>
         this.repository = repository;
     }
 
-    protected async Task<TEntity> FindByIdAsync(Guid entityId)
+    protected Task<TEntity> FindByIdAsync(Guid entityId)
     {
-        return await repository.FindByIdAsync(new EntityId(entityId));
+        return repository.FindByIdAsync(new EntityId(entityId));
     }
 
-    protected IQueryable<TEntity> FindBySpecification(ISpecification<TEntity> specification)
+    protected Task<TEntity> FindFirstBySpecification(ISpecification<TEntity> specification)
     {
-        return repository.Find(specification);
+        return repository.FindFirstAsync(specification);
+    }
+
+    protected Task<IEnumerable<TEntity>> FindBySpecification(ISpecification<TEntity> specification)
+    {
+        return repository.FindAsync(specification);
     }
 
     protected async Task<TEntity> SaveChangesAsync(TEntity entity, bool isNewEntity = false)

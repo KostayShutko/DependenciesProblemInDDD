@@ -14,7 +14,7 @@ public class PayQuoteCommandHandler : BaseCommand<Quote>, IRequestHandler<PayQuo
 
     public async Task<Guid> Handle(PayQuoteCommand command, CancellationToken cancellationToken)
     {
-        var quote = FindBySpecification(new GetByQuoteIdWithPaymentSpecification(command.QuoteId)).First();
+        var quote = await FindFirstBySpecification(new GetByQuoteIdWithPaymentSpecification(command.QuoteId));
 
         quote.Pay();
 
