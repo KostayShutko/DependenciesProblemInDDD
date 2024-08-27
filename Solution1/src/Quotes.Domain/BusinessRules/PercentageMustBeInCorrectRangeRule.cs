@@ -1,6 +1,4 @@
-﻿using Quotes.Domain.Entities.ValueObjects;
-
-namespace Quotes.Domain.BusinessRules;
+﻿namespace Quotes.Domain.BusinessRules;
 
 public class PercentageMustBeInCorrectRangeRule : IBusinessRule
 {
@@ -13,8 +11,7 @@ public class PercentageMustBeInCorrectRangeRule : IBusinessRule
 
     public bool IsBroken()
     {
-        var isValid = percentage > 0 && percentage <= 1;
-        return !isValid;
+        return percentage < 0 || percentage > 1;
     }
 
     public string Message => "The percentage must be in correct range";

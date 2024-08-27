@@ -11,9 +11,8 @@ public class QuantityMustBeGreaterThanZeroRule : IBusinessRule
 
     public bool IsBroken()
     {
-        var isValid = quantity > 0;
-        return !isValid;
+        return quantity < 0;
     }
 
-    public string Message => "The quantity must be greater than zero";
+    public string Message => "The quantity must be greater or equal to zero";
 }

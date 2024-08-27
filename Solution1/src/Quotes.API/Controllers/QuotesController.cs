@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Quotes.API.Requests;
 using Quotes.Application.Commands.AddQuoteItemCommand;
 using Quotes.Application.Commands.ApproveQuoteCommand;
+using Quotes.Application.Commands.CompleteQuoteCommand;
 using Quotes.Application.Commands.CreateQuoteCommand;
 using Quotes.Application.Commands.PayQuoteCommand;
+using Quotes.Application.Commands.ReviewQuoteCommand;
+using Quotes.Application.Commands.SubmitQuoteCommand;
 
 namespace Quotes.API.Controllers;
 
@@ -38,6 +41,20 @@ public class QuotesController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPut("{id}/submission")]
+    public async Task<IActionResult> SubmitQuote([FromRoute] Guid id)
+    {
+        var result = await mediator.Send(new SubmitQuoteCommand { QuoteId = id });
+        return Ok(result);
+    }
+
+    [HttpPut("{id}/review")]
+    public async Task<IActionResult> ReviewQuote([FromRoute] Guid id)
+    {
+        var result = await mediator.Send(new ReviewQuoteCommand { QuoteId = id });
+        return Ok(result);
+    }
+
     [HttpPut("{id}/approval")]
     public async Task<IActionResult> ApproveQuote([FromRoute] Guid id)
     {
@@ -49,6 +66,13 @@ public class QuotesController : ControllerBase
     public async Task<IActionResult> PayQuote([FromRoute] Guid id)
     {
         var result = await mediator.Send(new PayQuoteCommand { QuoteId = id });
+        return Ok(result);
+    }
+
+    [HttpPut("{id}/completion")]
+    public async Task<IActionResult> CompleteQuote([FromRoute] Guid id)
+    {
+        var result = await mediator.Send(new CompleteQuoteCommand { QuoteId = id });
         return Ok(result);
     }
 }

@@ -11,9 +11,8 @@ public class CostMustBeGreaterThanZeroRule : IBusinessRule
 
     public bool IsBroken()
     {
-        var isValid = cost > 0;
-        return !isValid;
+        return cost < 0;
     }
 
-    public string Message => "The cost must be greater than zero";
+    public string Message => "The cost must be greater or equal to zero";
 }
