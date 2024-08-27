@@ -1,10 +1,13 @@
-﻿namespace Quotes.Domain.Entities.ValueObjects;
+﻿using Quotes.Domain.BusinessRules;
+
+namespace Quotes.Domain.Entities.ValueObjects;
 
 public class Cost : ValueObject<decimal>
 {
     public Cost(decimal cost)
         : base(cost)
     {
+        BusinessRulesValidator.CheckRule(new CostMustBeGreaterThanZeroRule(cost));
     }
 
     public static Cost operator *(Cost cost, Quantity quantity) => new Cost(cost.Value * quantity.Value);
